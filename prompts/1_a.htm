@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://adventofcode.com/2024/day/1 -->
+<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Day 1 - Advent of Code 2024</title>
+<link rel="stylesheet" type="text/css" href="./1_a_files/style.css">
+<link rel="stylesheet alternate" type="text/css" href="./1_a_files/highcontrast.css" title="High Contrast">
+<link rel="shortcut icon" href="https://adventofcode.com/favicon.png">
+<script async="" src="./1_a_files/analytics.js"></script><script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don't
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I can
+only take so much traffic.  Please be considerate so that everyone gets to play.
+
+If you're curious about how Advent of Code works, it's running on some custom
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles each year takes all of my free time for 4-5 months. A lot of effort
+went into building this thing - I hope you're enjoying playing it as much as I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @was.tl on Bluesky, @ericwastl@hachyderm.io on
+Mastodon, and @ericwastl on Twitter.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class="title-global"><a href="https://adventofcode.com/">Advent of Code</a></h1><nav><ul><li><a href="https://adventofcode.com/2024/about">[About]</a></li><li><a href="https://adventofcode.com/2024/events">[Events]</a></li><li><a href="https://cottonbureau.com/people/advent-of-code" target="_blank">[Shop]</a></li><li><a href="https://adventofcode.com/2024/settings">[Settings]</a></li><li><a href="https://adventofcode.com/2024/auth/logout">[Log Out]</a></li></ul></nav><div class="user">MarkyMarkMcDonald</div></div><div><h1 class="title-event">&nbsp;&nbsp;<span class="title-event-wrap">0.0.0.0:</span><a href="https://adventofcode.com/2024">2024</a><span class="title-event-wrap"></span></h1><nav><ul><li><a href="https://adventofcode.com/2024">[Calendar]</a></li><li><a href="https://adventofcode.com/2024/support">[AoC++]</a></li><li><a href="https://adventofcode.com/2024/sponsors">[Sponsors]</a></li><li><a href="https://adventofcode.com/2024/leaderboard">[Leaderboard]</a></li><li><a href="https://adventofcode.com/2024/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id="sidebar">
+<div id="sponsor"><div class="quiet">Our <a href="https://adventofcode.com/2024/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="https://adventofcode.com/2024/sponsors/redirect?url=https%3A%2F%2Fcodecrafters%2Eio%2Faoc2024" target="_blank" onclick="if(ga)ga(&#39;send&#39;,&#39;event&#39;,&#39;sponsor&#39;,&#39;sidebar&#39;,this.href);" rel="noopener">CodeCrafters.io</a> - Build your own Interpreter, SQLite, or Git. =============== It's coding practice on steroids. ============== Try it out for free today &gt;&gt; =============== Bonus, solve this: PWFI YFRP, ZIK XVNVC% KTW GOXA MMQEMOTH</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class="day-desc"><h2>--- Day 1: Historian Hysteria ---</h2><p>The <em>Chief Historian</em> is always present for the big Christmas sleigh launch, but nobody has seen him in months! Last anyone heard, he was visiting locations that are historically significant to the North Pole; a group of Senior Historians has asked you to accompany them as they check the places they think he was most likely to visit.</p>
+<p>As each location is checked, they will mark it on their list with a <em class="star">star</em>. They figure the Chief Historian <em>must</em> be in one of the first fifty places they'll look, so in order to save Christmas, you need to help them get <em class="star">fifty stars</em> on their list before Santa takes off on December 25th.</p>
+<p>Collect stars by solving puzzles.  Two puzzles will be made available on each day in the Advent calendar; the second puzzle is unlocked when you complete the first.  Each puzzle grants <em class="star">one star</em>. Good luck!</p>
+<p>You haven't even left yet and the group of Elvish Senior Historians has already hit a problem: their list of locations to check is currently <em>empty</em>. Eventually, someone decides that the best place to check first would be the Chief Historian's office.</p>
+<p>Upon pouring into the office, everyone confirms that the Chief Historian is indeed nowhere to be found. Instead, the Elves discover an assortment of notes and lists of historically significant locations! This seems to be the planning the Chief Historian was doing before he left. Perhaps these notes can be used to determine which locations to search?</p>
+<p>Throughout the Chief's office, the historically significant locations are listed not by name but by a unique number called the <em>location ID</em>. To make sure they don't miss anything, The Historians split into two groups, each searching the office and trying to create their own complete list of location IDs.</p>
+<p>There's just one problem: by holding the two lists up <em>side by side</em> (your puzzle input), it quickly becomes clear that the lists aren't very similar. Maybe you can help The Historians reconcile their lists?</p>
+<p>For example:</p>
+<pre><code>3   4
+4   3
+2   5
+1   3
+3   9
+3   3
+</code></pre>
+<p>Maybe the lists are only off by a small amount! To find out, pair up the numbers and measure how far apart they are. Pair up the <em>smallest number in the left list</em> with the <em>smallest number in the right list</em>, then the <em>second-smallest left number</em> with the <em>second-smallest right number</em>, and so on.</p>
+<p>Within each pair, figure out <em>how far apart</em> the two numbers are; you'll need to <em>add up all of those distances</em>. For example, if you pair up a <code>3</code> from the left list with a <code>7</code> from the right list, the distance apart is <code>4</code>; if you pair up a <code>9</code> with a <code>3</code>, the distance apart is <code>6</code>.</p>
+<p>In the example list above, the pairs and distances would be as follows:</p>
+<ul>
+<li>The smallest number in the left list is <code>1</code>, and the smallest number in the right list is <code>3</code>. The distance between them is <code><em>2</em></code>.</li>
+<li>The second-smallest number in the left list is <code>2</code>, and the second-smallest number in the right list is another <code>3</code>. The distance between them is <code><em>1</em></code>.</li>
+<li>The third-smallest number in both lists is <code>3</code>, so the distance between them is <code><em>0</em></code>.</li>
+<li>The next numbers to pair up are <code>3</code> and <code>4</code>, a distance of <code><em>1</em></code>.</li>
+<li>The fifth-smallest numbers in each list are <code>3</code> and <code>5</code>, a distance of <code><em>2</em></code>.</li>
+<li>Finally, the largest number in the left list is <code>4</code>, while the largest number in the right list is <code>9</code>; these are a distance <code><em>5</em></code> apart.</li>
+</ul>
+<p>To find the <em>total distance</em> between the left list and the right list, add up the distances between all of the pairs you found. In the example above, this is <code>2 + 1 + 0 + 1 + 2 + 5</code>, a total distance of <code><em>11</em></code>!</p>
+<p>Your actual left and right lists contain many location IDs. <em>What is the total distance between your lists?</em></p>
+</article>
+<p>To begin, <a href="https://adventofcode.com/2024/day/1/input" target="_blank">get your puzzle input</a>.</p>
+<form method="post" action="https://adventofcode.com/2024/day/1/answer"><input type="hidden" name="level" value="1"><p>Answer: <input type="text" name="answer" autocomplete="off"> <input type="submit" value="[Submit]"></p></form>
+<p>You can also <span class="share">[Share<span class="share-content">on
+  <a href="https://bsky.app/intent/compose?text=%22Historian+Hysteria%22+%2D+Day+1+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F1" target="_blank">Bluesky</a>
+  <a href="https://twitter.com/intent/tweet?text=%22Historian+Hysteria%22+%2D+Day+1+%2D+Advent+of+Code+2024&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F1&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem(&#39;mastodon.server&#39;)}finally{} if(typeof ms!==&#39;string&#39;)ms=&#39;&#39;; ms=prompt(&#39;Mastodon Server?&#39;,ms); if(typeof ms===&#39;string&#39; &amp;&amp; ms.length){this.href=&#39;https://&#39;+ms+&#39;/share?text=%22Historian+Hysteria%22+%2D+Day+1+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F1&#39;;try{localStorage.setItem(&#39;mastodon.server&#39;,ms);}finally{}}else{return false;}" target="_blank">Mastodon</a></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-69522494-1', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('send', 'pageview');
+</script>
+<!-- /ga -->
+
+<span id="okta-plugin-message-channel-available" style="display: none;"></span></body><div class="vimiumReset"><template shadowrootmode="open"><style type="text/css">/*
+ * Many CSS class names in this file use the verbose "vimiumXYZ" as the class name. This is so we
+ * don't use the same CSS class names that the page is using, so the page's CSS doesn't mess with
+ * the style of our Vimium dialogs.
+ *
+ * The z-indexes of Vimium elements are very large, because we always want them to show on top. We
+ * know that Chrome supports z-index values up to about 2^31. The values we use are large numbers
+ * approaching that bound. However, we must leave headroom for link hints. Hint marker z-indexes
+ * start at 2140000001.
+ */
+
+/*
+ * This vimiumReset class can be added to any of our UI elements to give it a clean slate. This is
+ * useful in case the page has declared a broad rule like "a { padding: 50px; }" which will mess up
+ * our UI. These declarations contain more specifiers than necessary to increase their specificity
+ * (precedence).
+ */
+.vimiumReset,
+div.vimiumReset,
+span.vimiumReset,
+table.vimiumReset,
+a.vimiumReset,
+a:visited.vimiumReset,
+a:link.vimiumReset,
+a:hover.vimiumReset,
+td.vimiumReset,
+tr.vimiumReset {
+  background: none;
+  border: none;
+  bottom: auto;
+  box-shadow: none;
+  color: black;
+  cursor: auto;
+  display: inline;
+  float: none;
+  font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: inherit;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  height: auto;
+  left: auto;
+  letter-spacing: 0;
+  line-height: 100%;
+  margin: 0;
+  max-height: none;
+  max-width: none;
+  min-height: 0;
+  min-width: 0;
+  opacity: 1;
+  padding: 0;
+  position: static;
+  right: auto;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+  text-shadow: none;
+  text-transform: none;
+  top: auto;
+  vertical-align: baseline;
+  white-space: normal;
+  width: auto;
+  z-index: 2140000000; /* Vimium's reference z-index value. */
+}
+
+thead.vimiumReset, tbody.vimiumReset {
+  display: table-header-group;
+}
+
+tbody.vimiumReset {
+  display: table-row-group;
+}
+
+/* Linkhints CSS */
+
+div#vimiumHintMarkerContainer {
+  pointer-events: none;
+}
+
+div.internalVimiumHintMarker {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 11px;
+  padding: 1px 3px 0px 3px;
+  background: linear-gradient(to bottom, #FFF785 0%,#FFC542 100%);
+  border: solid 1px #C38A22;
+  border-radius: 3px;
+  box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.3);
+}
+
+div.internalVimiumHintMarker span {
+  color: #302505;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 11px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+div.internalVimiumHintMarker > .matchingCharacter {
+  color: #D4AC3A;
+}
+
+div > .vimiumActiveHintMarker span {
+  color: #A07555 !important;
+}
+
+/* Input hints CSS */
+
+div.internalVimiumInputHint {
+  position: absolute;
+  display: block;
+  background-color: rgba(255, 247, 133, 0.3);
+  border: solid 1px #C38A22;
+  pointer-events: none;
+}
+
+div.internalVimiumSelectedInputHint {
+  background-color: rgba(255, 102, 102, 0.3);
+  border: solid 1px #993333 !important;
+}
+
+div.internalVimiumSelectedInputHint span {
+  color: white !important;
+}
+
+/* Frame Highlight Marker CSS*/
+div.vimiumHighlightedFrame {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  border: 5px solid yellow;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Help Dialog CSS */
+
+iframe.vimiumHelpDialogFrame {
+  background-color: rgba(10,10,10,0.6);
+  padding: 0px;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: fixed;
+  border: none;
+  z-index: 2139999997; /* Three less than the reference value. */
+}
+
+div#vimiumHelpDialogContainer {
+  opacity:1.0;
+  background-color:white;
+  border:2px solid #b3b3b3;
+  border-radius:6px;
+  width: 840px;
+  max-width: calc(100% - 100px);
+  max-height: calc(100% - 100px);
+  margin: 50px auto;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+div#vimiumHelpDialog {
+  min-width: 600px;
+  padding:8px 12px;
+}
+
+span#vimiumTitle, span#vimiumTitle span,  span#vimiumTitle * { font-size:20px; }
+#vimiumTitle {
+  display: block;
+  line-height: 130%;
+  white-space: nowrap;
+}
+td.vimiumHelpDialogTopButtons {
+  width: 100%;
+  text-align: right;
+}
+#helpDialogOptionsPage, #helpDialogWikiPage {
+  font-size: 14px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+div.vimiumColumn {
+  width:50%;
+  float:left;
+  font-size: 11px;
+  line-height: 130%;
+}
+
+div.vimiumColumn tr {
+    display: table-row;
+}
+
+div.vimiumColumn td {
+    display: table-cell;
+    font-size: 11px;
+    line-height: 130%;
+}
+div.vimiumColumn table, div.vimiumColumn td, div.vimiumColumn tr { padding:0; margin:0; }
+div.vimiumColumn table { width:100%; table-layout:auto; }
+div.vimiumColumn td { vertical-align:top; padding:1px; }
+div#vimiumHelpDialog div.vimiumColumn tr > td:first-of-type {
+  /* This is the "key" column, e.g. "j", "gg". */
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:14px;
+  text-align:right;
+  white-space:nowrap;
+}
+span.vimiumHelpDialogKey {
+  background-color: rgb(243,243,243);
+  color: rgb(33,33,33);
+  margin-left: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 3px;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  box-shadow: inset 0 -1px 0 #bbb;
+  font-family: monospace;
+  font-size: 11px;
+}
+/* Make the description column as wide as it can be. */
+div#vimiumHelpDialog div.vimiumColumn tr > td:nth-of-type(3) { width:100%; }
+div#vimiumHelpDialog div.vimiumDivider {
+  display: block;
+  height:1px;
+  width:100%;
+  margin:10px auto;
+  background-color:#9a9a9a;
+}
+div#vimiumHelpDialog td.vimiumHelpSectionTitle {
+  padding-top:3px;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;
+  font-weight:bold;
+}
+div#vimiumHelpDialog td.vimiumHelpDescription {
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:14px;
+}
+div#vimiumHelpDialog span.vimiumCopyCommandNameName {
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+/* Advanced commands are hidden by default until you show them. */
+div#vimiumHelpDialog tr.advanced { display: none; }
+div#vimiumHelpDialog.showAdvanced tr.advanced { display: table-row; }
+div#vimiumHelpDialog div.advanced td:nth-of-type(3) { color: #555; }
+div#vimiumHelpDialog a.closeButton {
+  font-family:"courier new";
+  font-weight:bold;
+  color:#555;
+  text-decoration:none;
+  font-size:24px;
+  position: relative;
+  top: 3px;
+  padding-left: 5px;
+  cursor: pointer;
+}
+div#vimiumHelpDialog a {
+  text-decoration: underline;
+}
+
+div#vimiumHelpDialog a.closeButton:hover {
+  color:black;
+  -webkit-user-select:none;
+}
+div#vimiumHelpDialogFooter {
+  display: block;
+  position: relative;
+  margin-bottom: 37px;
+}
+table.helpDialogBottom {
+  width:100%;
+}
+td.helpDialogBottomRight {
+  width:100%;
+  float:right;
+  text-align: right;
+}
+td.helpDialogBottomRight, td.helpDialogBottomLeft {
+  padding: 0px;
+}
+div#vimiumHelpDialogFooter * { font-size:10px; }
+a#toggleAdvancedCommands, span#help-dialog-tip {
+  position: relative;
+  top: 19px;
+  white-space: nowrap;
+  font-size: 10px;
+}
+a:link.vimiumHelDialogLink, a:visited.vimiumHelDialogLink,
+  a:hover.vimiumHelDialogLink, a:active.vimiumHelDialogLink, a#toggleAdvancedCommands {
+    color:#2f508e;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Vimium HUD CSS */
+
+div.vimiumHUD {
+  display: block;
+  position: fixed;
+  width: calc(100% - 20px);
+  bottom: 8px;
+  left: 8px;
+  background: #F1F1F1;
+  text-align: left;
+  border-radius: 4px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.8);
+  border: 1px solid #aaa;
+  z-index: 2139999999;
+}
+
+iframe.vimiumHUDFrame {
+  background-color: transparent;
+  padding: 0px;
+  overflow: hidden;
+  display: block;
+  position: fixed;
+  width: 20%;
+  min-width: 300px;
+  height: 58px;
+  bottom: -14px;
+  right: 20px;
+  margin: 0 0 0 -40%;
+  border: none;
+  z-index: 2139999998; /* Two less than the reference value. */
+  opacity: 0;
+}
+
+div.vimiumHUD .vimiumHUDSearchArea {
+  display: block;
+  padding: 3px;
+  background-color: #F1F1F1;
+  border-radius: 4px 4px 0 0;
+}
+
+div.vimiumHUD .vimiumHUDSearchAreaInner {
+  color: #777;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  height: 30px;
+  margin-bottom: 0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  width: 100%;
+  outline: none;
+  box-sizing: border-box;
+  line-height: 20px;
+}
+
+div.vimiumHUD .hud-find {
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+div.vimiumHUD span#hud-find-input, div.vimiumHUD span#hud-match-count {
+  color: #000;
+  display: inline;
+  outline: none;
+  white-space: nowrap;
+  overflow-y: hidden;
+}
+
+div.vimiumHUD span#hud-find-input:before {
+  content: "/";
+}
+
+div.vimiumHUD span#hud-match-count {
+  color: #aaa;
+  font-size: 12px;
+}
+
+div.vimiumHUD span#hud-find-input br {
+  display: none;
+}
+
+div.vimiumHUD span#hud-find-input * {
+  display: inline;
+  white-space: nowrap;
+}
+
+body.vimiumFindMode ::selection {
+  background: #ff9632;
+}
+
+/* Vomnibar Frame CSS */
+
+iframe.vomnibarFrame {
+  background-color: transparent;
+  padding: 0px;
+  overflow: hidden;
+
+  display: block;
+  position: fixed;
+  width: calc(80% + 20px); /* same adjustment as in pages/vomnibar.js */
+  min-width: 400px;
+  height: calc(100% - 70px);
+  top: 70px;
+  left: 50%;
+  margin: 0 0 0 -40%;
+  border: none;
+  font-family: sans-serif;
+  z-index: 2139999998; /* Two less than the reference value. */
+}
+
+div.vimiumFlash {
+  box-shadow: 0px 0px 4px 2px #4183C4;
+  padding: 1px;
+  background-color: transparent;
+  position: absolute;
+  z-index: 2140000000;
+}
+
+/* UIComponent CSS */
+iframe.vimiumUIComponentHidden {
+  display: none;
+}
+
+iframe.vimiumUIComponentVisible {
+  display: block;
+  color-scheme: light dark;
+}
+
+iframe.vimiumUIComponentReactivated {
+  border: 5px solid yellow;
+}
+
+iframe.vimiumNonClickable {
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* DarkReader is a popular dark mode browser extension. It can apply an invert filter to the whole
+   * page to make the page dark, when used in Filter and Filter+ modes. We want to reverse/invert
+   * that filter again for Vimium's UI elements, because Vimium is already dark mode aware. */
+  iframe.reverseDarkReaderFilter {
+    -webkit-filter: invert(100%) hue-rotate(180deg) !important;
+    filter: invert(100%) hue-rotate(180deg) !important;
+  }
+
+  /* Dark mode CSS for options page and exclusions */
+
+  body.vimiumBody {
+    background-color: #292a2d;
+    color: white;
+  }
+
+  body.vimiumBody a,
+  body.vimiumBody a:visited {
+    color: #8ab4f8;
+  }
+
+  body.vimiumBody textarea,
+  body.vimiumBody input {
+    background-color: #1d1d1f;
+    border-color: #1d1d1f;
+    color: #e8eaed;
+  }
+
+  body.vimiumBody div.example {
+    color: #9aa0a6;
+  }
+
+  body.vimiumBody div#state,
+  body.vimiumBody div#footer {
+    background-color: #202124;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Dark Mode CSS for Help Dialog */
+
+  div#vimiumHelpDialogContainer {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: #202124;
+  }
+
+  div#vimiumHelpDialog {
+    background-color: #292a2d;
+    color: white;
+  }
+
+  div#vimiumHelpDialog td.vimiumHelpDescription {
+    color: #c9cccf;
+  }
+
+  span#vimiumTitle,
+  div#vimiumHelpDialog td.vimiumHelpSectionTitle {
+    color: white;
+  }
+
+  #vimiumTitle > span:first-child {
+    color: #8ab4f8 !important;
+  }
+
+  div#vimiumHelpDialog a {
+    color: #8ab4f8;
+  }
+
+  div#vimiumHelpDialog div.vimiumDivider {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  span.vimiumHelpDialogKey {
+    background-color: #1d1d1f;
+    border: solid 1px black;
+    box-shadow: none;
+    color: white;
+  }
+}
+</style><iframe class="vimiumHUDFrame vimiumNonClickable vimiumUIComponentVisible" allow="clipboard-read; clipboard-write" src="chrome-extension://dbepggeogbaibhgnhhndojpepiihcmeb/pages/hud.html"></iframe><style type="text/css">iframe.vimiumHUDFrame.vimiumUIComponentVisible {
+  opacity: 1;
+}</style></template></div></html>
